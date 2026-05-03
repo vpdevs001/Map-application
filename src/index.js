@@ -6,24 +6,12 @@ import cookieParser from "cookie-parser";
 import express from "express";
 import { Server } from "socket.io";
 
-import { kafkaClient } from "./config/kafka-client.js";
-import { initSocketService } from "./services/socket.service.js";
+import { initSocketService } from "./services/socket.services.js";
 import authRoutes from "./routes/auth.routes.js";
 
 async function main() {
   const PORT = process.env.PORT ?? 8000;
 
-  // ── Kafka topic setup ──────────────────────────
-  const admin = kafkaClient.admin();
-  await admin.connect();
-  await admin.createTopics({
-    waitForLeaders: true,
-    topics: [{ topic: "location-updates", numPartitions: 2 }],
-  });
-  await admin.disconnect();
-  console.log("Kafka topics ready ✅");
-
-  // ── Express + Socket.IO ────────────────────────
   const app = express();
   const server = http.createServer(app);
   const io = new Server();
@@ -33,6 +21,7 @@ async function main() {
 
   app.use("/api/auth", authRoutes);
   app.use(express.static(path.resolve("./public")));
+  
   app.get("/health", (req, res) => res.json({ healthy: true }));
 
   io.attach(server);
