@@ -1,4 +1,4 @@
-import { kafkaClient } from './kafka-client.js';
+import { kafkaClient } from "../config/kafka-client.js";
 
 async function init() {
   const kafkaConsumer = kafkaClient.consumer({
@@ -7,7 +7,7 @@ async function init() {
   await kafkaConsumer.connect();
 
   await kafkaConsumer.subscribe({
-    topics: ['location-updates'],
+    topics: ["location-updates"],
     fromBeginning: true,
   });
 

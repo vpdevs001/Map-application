@@ -1,4 +1,4 @@
-import { kafkaClient } from './kafka-client.js';
+import { kafkaClient } from "./kafka-client.js";
 
 async function setup() {
   const admin = kafkaClient.admin();
@@ -8,7 +8,7 @@ async function setup() {
   console.log(`Kafka Admin Connecting Success...`);
 
   await admin.createTopics({
-    topics: [{ topic: 'location-updates', numPartitions: 2 }],
+    topics: [{ topic: "location-updates", numPartitions: 2 }],
   });
 
   await admin.disconnect();
